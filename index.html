@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
+    <title>Chat Anonymously</title>
     <style>
         body {
             font-family: sans-serif;
@@ -98,6 +98,95 @@
             float: right;
             cursor: pointer;
         }
+
+        /* Settings Panel */
+        #settings-panel {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) translateX(100%);
+            width: 220px;
+            background: var(--container-bg, #fff);
+            padding: 20px;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -3px 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, background 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Show settings panel */
+        #settings-panel.active {
+            transform: translateY(-50%) translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Settings Button */
+        #settings-btn {
+            position: fixed;
+            right: 10px;
+            top: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #settings-btn:hover {
+            background: #0056b3;
+        }
+
+        /* Theme Toggle */
+        #theme-toggle, #animation-toggle {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        #theme-toggle:hover, #animation-toggle:hover {
+            background: #0056b3;
+        }
+
+        .dark-mode {
+            background: #121212;
+            color: white;
+        }
+
+        .dark-mode #updates-panel,
+        .dark-mode #settings-panel {
+            background: #1e1e1e;
+            color: white;
+        }
+
+        .dark-mode button {
+            background: #444;
+            color: white;
+        }
+
+        /* Disable animations */
+        .no-animations, .no-animations * {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        #close-settings {
+            background: none;
+            border: none;
+            color: #777;
+            font-size: 16px;
+            float: right;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -106,6 +195,7 @@
         <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
         <button id="send-button">Send</button>
     </div>
+    
     <!-- Update Button -->
     <button id="update-btn">Updates</button>
 
@@ -118,6 +208,17 @@
             <li>Enhance Stability</li>
         </ul>
         <button id="close-updates">❌ Close</button>
+    </div>
+
+    <!-- Settings Button -->
+    <button id="settings-btn">Settings</button>
+
+    <!-- Settings Panel -->
+    <div id="settings-panel">
+        <h3>Settings</h3>
+        <button id="theme-toggle">Dark Mode</button>
+        <button id="animation-toggle">Animations: On</button>
+        <button id="close-settings">❌ Close</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -160,14 +261,69 @@
         }
 
         // Toggle update panel
-        document.getElementById("update-btn").addEventListener("click", function() { 
-            document.getElementById("updates-panel").classList.toggle("active"); 
+        document.getElementById("update-btn").addEventListener("click", function() {
+            document.getElementById("updates-panel").classList.toggle("active");
         });
 
         // Close update panel
-        document.getElementById("close-updates").addEventListener("click", function() { 
-            document.getElementById("updates-panel").classList.remove("active"); 
+        document.getElementById("close-updates").addEventListener("click", function() {
+            document.getElementById("updates-panel").classList.remove("active");
+        });
+
+        // Toggle settings panel
+        document.getElementById("settings-btn").addEventListener("click", function() {
+            document.getElementById("settings-panel").classList.toggle("active");
+        });
+
+        // Close settings panel
+        document.getElementById("close-settings").addEventListener("click", function() {
+            document.getElementById("settings-panel").classList.remove("active");
+        });
+
+        // Dark Mode toggle
+        document.addEventListener("DOMContentLoaded", function() {
+            const themeToggle = document.getElementById("theme-toggle");
+            const currentTheme = localStorage.getItem("theme");
+
+            if (currentTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                themeToggle.textContent = "☀️ Light Mode";
+            }
+
+            themeToggle.addEventListener("click", function() {
+                document.body.classList.toggle("dark-mode");
+
+                if (document.body.classList.contains("dark-mode")) {
+                    localStorage.setItem("theme", "dark");
+                    themeToggle.textContent = "Light Mode"; // Updated consistency with emoji
+                } else {
+                    localStorage.setItem("theme", "light");
+                    themeToggle.textContent = "Dark Mode"; // Updated emoji for consistency
+                }
+            });
+        });
+
+        // Load Animations Preference
+        const animationToggle = document.getElementById("animation-toggle"); 
+        const animationsDisabled = localStorage.getItem("animations") === "off";
+
+        if (animationsDisabled) { 
+            document.body.classList.add("no-animations"); 
+            animationToggle.textContent = "Animations: Off";
+        }
+
+        // Toggle Animations
+        animationToggle.addEventListener("click", () => { 
+            if (document.body.classList.contains("no-animations")) { 
+                document.body.classList.remove("no-animations"); 
+                localStorage.setItem("animations", "on"); 
+                animationToggle.textContent = "Animations: On"; 
+            } else { 
+                document.body.classList.add("no-animations"); 
+                localStorage.setItem("animations", "off"); 
+                animationToggle.textContent = "Animations: Off"; 
+            } 
         });
     </script>
 </body>
-</html>
+            </html>

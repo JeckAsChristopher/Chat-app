@@ -6,7 +6,7 @@
     <title>Chat App</title>
     <style>
         body {
-            font-family: sans-serif; /* Changed to sans-serif */
+            font-family: sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -47,7 +47,7 @@
         #send-button:hover {
             background-color: #0056b3;
         }
-        
+
         /* Update Panel (Initially Hidden) */
         #updates-panel {
             position: fixed;
@@ -70,7 +70,7 @@
             opacity: 1;
             pointer-events: auto;
         }
-        
+
         /* Update Button */
         #update-btn {
             position: fixed;
@@ -140,7 +140,8 @@
         sendButton.addEventListener('click', () => {
             const message = messageInput.value.trim();
             if (message) {
-                socket.emit('message', message);
+                const userAgent = navigator.userAgent; // Get the user agent string
+                socket.emit('message', message, userAgent); // Send the message with the user agent
                 messageInput.value = '';
             }
         });

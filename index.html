@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Anonymously</title>
+    <title>Chat App with Updates and Settings</title>
     <style>
         body {
             font-family: sans-serif;
@@ -13,7 +13,7 @@
         }
 
         h1 {
-            text-align: center;
+             text-align: center;
         }
 
         .chat-container {
@@ -23,6 +23,13 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: black; /* Ensure the text is black in light mode */
+        }
+
+        /* Dark Mode Styling */
+        .dark-mode .chat-container {
+            background-color: #121212;
+            color: white; /* Change the text color to white in dark mode */
         }
 
         #messages {
@@ -30,6 +37,12 @@
             overflow-y: scroll;
             margin-bottom: 10px;
             padding-right: 10px;
+            color: inherit; /* Inherit color from chat container */
+        }
+
+        /* Dark Mode Message Color */
+        .dark-mode #messages {
+            color: white; /* Ensure the messages are white in dark mode */
         }
 
         #message-input {
@@ -37,6 +50,14 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            color: black; /* Ensure input text is visible in light mode */
+        }
+
+        /* Dark Mode Input and Button */
+        .dark-mode #message-input, .dark-mode #send-button {
+            color: white; /* Input text turns white in dark mode */
+            background-color: #333; /* Dark background for input */
+            border-color: #444; /* Darker border in dark mode */
         }
 
         #send-button {
@@ -194,7 +215,7 @@
     </style>
 </head>
 <body>
-    <h1>Chats</h1>
+<h1>Chats</h1>
     <div class="chat-container">
         <div id="messages"></div>
         <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
@@ -331,4 +352,4 @@
         });
     </script>
 </body>
-            </html>
+</html>

@@ -6,7 +6,7 @@
     <title>Chat App</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: sans-serif; /* Changed to sans-serif */
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -47,6 +47,57 @@
         #send-button:hover {
             background-color: #0056b3;
         }
+        
+        /* Update Panel (Initially Hidden) */
+        #updates-panel {
+            position: fixed;
+            bottom: 50px;
+            left: 0;
+            transform: translateX(-100%);
+            width: 220px;
+            background: var(--container-bg, #fff);
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, background 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Show Panel */
+        #updates-panel.active {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* Update Button */
+        #update-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #update-btn:hover {
+            background: #218838;
+        }
+
+        /* Close Button */
+        #close-updates {
+            background: none;
+            border: none;
+            color: #777;
+            font-size: 16px;
+            float: right;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +105,19 @@
         <div id="messages"></div>
         <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
         <button id="send-button">Send</button>
+    </div>
+    <!-- Update Button -->
+    <button id="update-btn">Updates</button>
+
+    <!-- Update Panel -->
+    <div id="updates-panel">
+        <h3>Update Logs</h3>
+        <ul>
+            <li>Updated on 3/7/2025</li>
+            <li>Fixed Daily Bugs</li>
+            <li>Enhance Stability</li>
+        </ul>
+        <button id="close-updates">❌ Close</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -93,6 +157,16 @@
             messagesDiv.appendChild(messageElement);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;  // Scroll to the bottom
         }
+
+        // Toggle update panel
+        document.getElementById("update-btn").addEventListener("click", function() { 
+            document.getElementById("updates-panel").classList.toggle("active"); 
+        });
+
+        // Close update panel
+        document.getElementById("close-updates").addEventListener("click", function() { 
+            document.getElementById("updates-panel").classList.remove("active"); 
+        });
     </script>
 </body>
 </html>
